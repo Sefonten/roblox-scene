@@ -1,0 +1,76 @@
+--This is my first scene in GitHub-- script.parent.lua
+
+--I will help and show you how to create scripts (at the end I will show you a unique script) roblox scripts--
+--leadeboard script--
+
+game.Players.PlayerAdded:Connect(Function(plr)
+    local a = instance.new("Folder") -- 
+    a.Name = "leaderstats"
+    a.Parent = Player
+
+    local v = instance.new("IntValue")
+    v.Parent = a
+    v.Name = "Statser"
+    v.Value = 0
+end)
+
+**Unique script**
+
+-- Place this script in ServerScriptService if you need this script
+
+local Players = game:GetService("Players")
+
+-- List of items you want to give to players
+local items = {
+    "Item1", -- Replace with actual items you want to give
+    "Item2",
+    "Item3",
+    "item4"
+
+-- Function to give a random item to the player
+local function giveRandomItem(player)
+    local randomItem = items[math.random(1, #items)]
+    
+    -- Replace this with your actual item giving logic.
+    -- For example, if these are tools in the game:
+    local tool = game.ServerStorage:FindFirstChild(randomItem)
+    if tool then
+        local clone = tool:Clone()
+        clone.Parent = player.Backpack
+    end
+    
+    print(player.Name .. " has received a random item: " .. randomItem)
+end
+
+-- Track each player's jump count
+local function onCharacterAdded(character)
+    local player = Players:GetPlayerFromCharacter(character)
+    
+    if not player then return end
+    
+    local humanoid = character:WaitForChild("Humanoid")
+    local jumpCount = 0
+
+    humanoid.Jumping:Connect(function(isJumping)
+        if isJumping then
+            jumpCount = jumpCount + 1
+            print(player.Name .. " has jumped " .. jumpCount .. " times.")
+
+            if jumpCount >= 10 then
+                giveRandomItem(player)
+                jumpCount = 0 -- Reset jump count after getting item
+            end
+        end
+    end)
+end
+
+-- Listen for new players joining
+Players.PlayerAdded:Connect(function(player)
+    player.CharacterAdded:Connect(onCharacterAdded)
+end)
+
+**Pull items into ServerStorage**
+
+**This should work as expected, giving players a new random item once they’ve jumped 10 times**
+
+This all scripts in this scene
